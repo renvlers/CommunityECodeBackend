@@ -8,7 +8,6 @@ import cn.edu.cqu.communityecode.entity.User;
 import cn.edu.cqu.communityecode.repository.UserRepository;
 import cn.edu.cqu.communityecode.service.CodeService;
 import cn.edu.cqu.communityecode.util.PasswordUtil;
-import cn.edu.cqu.communityecode.util.Permission;
 import cn.edu.cqu.communityecode.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,8 +44,9 @@ public class UserController {
         try{
             User user = new User();
             user.setPhone(registerRequestDto.getPhone());
+            user.setUsername(registerRequestDto.getUsername());
             user.setPassword(PasswordUtil.sha256(registerRequestDto.getPassword()));
-            user.setPermissionId(Permission.OWNER);
+            user.setPermissionId(registerRequestDto.getPermission());
             user.setRoomNumber(registerRequestDto.getRoomNumber());
             userRepository.save(user);
             List<User> result = userRepository.findUserByPhone(registerRequestDto.getPhone());
