@@ -1,19 +1,13 @@
 package cn.edu.cqu.communityecode.controller;
 
-import cn.edu.cqu.communityecode.dto.RegisterRequestDto;
-import cn.edu.cqu.communityecode.dto.RegisterResponseDto;
-import cn.edu.cqu.communityecode.dto.SendCodeRequestDto;
-import cn.edu.cqu.communityecode.dto.SendCodeResponseDto;
+import cn.edu.cqu.communityecode.dto.*;
 import cn.edu.cqu.communityecode.entity.User;
 import cn.edu.cqu.communityecode.repository.UserRepository;
 import cn.edu.cqu.communityecode.service.CodeService;
 import cn.edu.cqu.communityecode.util.PasswordUtil;
 import cn.edu.cqu.communityecode.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +16,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private CodeService codeService;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -55,6 +48,23 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Response<>("账号注册失败", null);
+        }
+    }
+
+    @PostMapping("/login")
+    public Response<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        try {
+            String phone = loginRequestDto.getPhone();
+            List<User> users = userRepository.findUserByPhone(phone);
+            if(users.isEmpty()) throw new Exception("用户不存在");
+            User user = users.getLast();
+            if(!user.getPermissionId().equals(loginRequestDto.getPermission())) throw new Exception("权限验证失败");
+            String password = PasswordUtil.sha256(loginRequestDto.getPassword());
+            if(!password.equals(user.getPassword())) throw new Exception("密码错误");
+            return new Response<>("登录成功", new LoginResponseDto(user.getUid()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(e.getMessage(), null);
         }
     }
 }
