@@ -12,7 +12,7 @@ public class GuestRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "enter_time")
     private LocalDateTime enterTime;
@@ -27,8 +27,8 @@ public class GuestRecord {
     private String guestPhone;
 
     @Column(name = "entrance")
-    private int entrance;
+    private Integer entrance;
 
     @Column(name = "owner_id")
-    private int ownerId;
+    private Integer ownerId;
 }

@@ -29,7 +29,7 @@ public class GuestRequest {
     private String guestPhone;
 
     @Column(name = "owner_id")
-    private int ownerId;
+    private Integer ownerId;
 
     @Column(name = "hash")
     private String hash;

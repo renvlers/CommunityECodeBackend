@@ -13,7 +13,7 @@ import lombok.Data;
 public class Entrance {
     @Id
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;

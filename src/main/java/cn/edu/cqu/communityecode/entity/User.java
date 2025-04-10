@@ -10,7 +10,7 @@ public class User {
     @Id
     @Column(name = "uid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int uid;
+    private Integer uid;
 
     @Column(name = "phone")
     private String phone;
@@ -19,7 +19,7 @@ public class User {
     private String password;
 
     @Column(name = "permission_id")
-    private int permissionId;
+    private Integer permissionId;
 
     @Column(name = "room_number")
     private String roomNumber;
