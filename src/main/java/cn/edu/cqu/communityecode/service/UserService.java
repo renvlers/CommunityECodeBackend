@@ -1,23 +1,30 @@
 package cn.edu.cqu.communityecode.service;
 
+import cn.edu.cqu.communityecode.entity.User;
+import cn.edu.cqu.communityecode.repository.UserRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
 @Service
-public class CodeService {
+public class UserService {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final Cache<String, String> codeCache = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
+
+    @Autowired
+    private UserRepository userRepository;
 
     public boolean sendVerificationCode(String phoneNumber) {
         StringBuilder code = new StringBuilder();
@@ -57,10 +64,39 @@ public class CodeService {
 
     public boolean checkVerificationCode(String phone, String inputCode) {
         String realCode = codeCache.getIfPresent(phone);
+        if(realCode != null) removeVerificationCode(phone);
         return realCode != null && realCode.equals(inputCode);
     }
 
     public void removeVerificationCode(String phone) {
         codeCache.invalidate(phone);
+    }
+
+    public User getUserByPhone(String phone) {
+        try {
+            List<User> users = userRepository.findUserByPhone(phone);
+            if(users.isEmpty()) throw new Exception("用户不存在");
+            return users.getLast();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void createNewUser(User user) {
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changePassword(User user, String password) {
+        try {
+            user.setPassword(password);
+            userRepository.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
