@@ -3,12 +3,10 @@ package cn.edu.cqu.communityecode.controller;
 import cn.edu.cqu.communityecode.dto.*;
 import cn.edu.cqu.communityecode.entity.User;
 import cn.edu.cqu.communityecode.service.UserService;
-import cn.edu.cqu.communityecode.util.PasswordUtil;
+import cn.edu.cqu.communityecode.util.HashUtil;
 import cn.edu.cqu.communityecode.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -36,7 +34,7 @@ public class UserController {
             User user = new User();
             user.setPhone(registerRequestDto.getPhone());
             user.setUsername(registerRequestDto.getUsername());
-            user.setPassword(PasswordUtil.sha256(registerRequestDto.getPassword()));
+            user.setPassword(HashUtil.sha256(registerRequestDto.getPassword()));
             user.setPermissionId(registerRequestDto.getPermission());
             user.setRoomNumber(registerRequestDto.getRoomNumber());
             userService.createNewUser(user);
@@ -56,7 +54,7 @@ public class UserController {
             User user = userService.getUserByPhone(phone);
             if(user == null) throw new Exception("用户不存在");
             if(!user.getPermissionId().equals(loginRequestDto.getPermission())) throw new Exception("权限验证失败");
-            String password = PasswordUtil.sha256(loginRequestDto.getPassword());
+            String password = HashUtil.sha256(loginRequestDto.getPassword());
             if(!password.equals(user.getPassword())) throw new Exception("密码错误");
             return new Response<>("登录成功", new LoginResponseDto(user.getUid()));
         } catch (Exception e) {
@@ -70,7 +68,7 @@ public class UserController {
         try {
             String phone = changePasswordRequestDto.getPhone();
             String verificationCode = changePasswordRequestDto.getVerificationCode();
-            String password = PasswordUtil.sha256(changePasswordRequestDto.getNewPassword());
+            String password = HashUtil.sha256(changePasswordRequestDto.getNewPassword());
             User user = userService.getUserByPhone(phone);
             if(user == null) throw new Exception("用户不存在");
             if(!userService.checkVerificationCode(phone, verificationCode)) throw new Exception("验证码错误");

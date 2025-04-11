@@ -2,7 +2,7 @@ package cn.edu.cqu.communityecode.util;
 
 import java.security.MessageDigest;
 
-public class PasswordUtil {
+public class HashUtil {
     public static String sha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
