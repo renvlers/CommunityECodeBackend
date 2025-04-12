@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findUserByPhone(String phone);
+    List<User> findUserByUid(Integer uid);
 
 }

@@ -72,31 +72,24 @@ public class UserService {
         codeCache.invalidate(phone);
     }
 
-    public User getUserByPhone(String phone) {
-        try {
-            List<User> users = userRepository.findUserByPhone(phone);
-            if(users.isEmpty()) throw new Exception("用户不存在");
-            return users.getLast();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public User getUserByPhone(String phone) throws Exception {
+        List<User> users = userRepository.findUserByPhone(phone);
+        if(users.isEmpty()) throw new Exception("用户不存在");
+        return users.getLast();
     }
 
-    public void createNewUser(User user) {
-        try {
-            userRepository.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public User getUserById(int uid) throws Exception {
+        List<User> users = userRepository.findUserByUid(uid);
+        if(users.isEmpty()) throw new Exception("用户不存在");
+        return users.getLast();
     }
 
-    public void changePassword(User user, String password) {
-        try {
-            user.setPassword(password);
-            userRepository.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void createNewUser(User user) throws Exception {
+        userRepository.save(user);
+    }
+
+    public void changePassword(User user, String password) throws Exception {
+        user.setPassword(password);
+        userRepository.save(user);
     }
 }

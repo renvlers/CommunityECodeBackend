@@ -7,6 +7,7 @@ import cn.edu.cqu.communityecode.repository.GuestRequestRepository;
 import cn.edu.cqu.communityecode.util.HashUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -40,27 +41,37 @@ public class GuestService {
         return HashUtil.sha256(digest);
     }
 
-    public void createNewRequest(GuestRequest guestRequest) {
-        try {
-            List<GuestRequest> requests = guestRequestRepository.findGuestRequestByGuestPhone(guestRequest.getGuestPhone());
-            if(!requests.isEmpty()) throw new Exception("该访客有未使用的登记");
-            guestRequestRepository.save(guestRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void createNewRequest(GuestRequest guestRequest) throws Exception {
+        List<GuestRequest> requests = guestRequestRepository.findGuestRequestByGuestPhone(guestRequest.getGuestPhone());
+        if(!requests.isEmpty()) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            LocalDateTime leaveTime = requests.getLast().getLeaveTime();
+            if(leaveTime.isAfter(currentTime) || leaveTime.isEqual(currentTime)) throw new Exception("该访客有未使用的登记");
+            else guestRequestRepository.delete(requests.getLast());
         }
+        guestRequestRepository.save(guestRequest);
     }
 
-    public void createNewRecord(GuestRecord guestRecord) {
-        try {
-            guestRecordRepository.save(guestRecord);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    public void createNewRecord(GuestRecord guestRecord) throws Exception {
+        guestRecordRepository.save(guestRecord);
     }
 
-    public GuestRequest checkIfRequestValidByPhone(String phone) {
+    public List<GuestRequest> getRequestsByOwnerId(int ownerId) throws Exception {
+        return guestRequestRepository.findGuestRequestsByOwnerId(ownerId);
+    }
+
+    public List<GuestRecord> getRecordsByOwnerId(int ownerId) throws Exception {
+        return guestRecordRepository.findGuestRecordsByOwnerId(ownerId);
+    }
+
+    public GuestRequest getRequestByRequestCode(String requestCode) throws Exception {
+        return guestRequestRepository.findGuestRequestByRequestCode(requestCode).getLast();
+    }
+
+    public GuestRequest checkIfRequestValidByPhone(String phone) throws Exception {
         List<GuestRequest> requests = guestRequestRepository.findGuestRequestByGuestPhone(phone);
-        if(requests.isEmpty()) return null;
+        if(requests.isEmpty()) throw new Exception("该访客没有进行登记");
         GuestRequest request = requests.getLast();
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime enterTime = request.getEnterTime();
@@ -72,14 +83,14 @@ public class GuestService {
 
         if(isWithinTimeRange) return request;
         else {
-            refuseRequest(request);
-            return null;
+            deleteRequest(request);
+            throw new Exception("该访客的登记已过期，已自动删除");
         }
     }
 
-    public GuestRequest checkIfRequestValidByCode(String code) {
+    public GuestRequest checkIfRequestValidByCode(String code) throws Exception {
         List<GuestRequest> requests = guestRequestRepository.findGuestRequestByRequestCode(code);
-        if(requests.isEmpty()) return null;
+        if(requests.isEmpty()) throw new Exception("该访客没有进行登记");
         GuestRequest request = requests.getLast();
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime enterTime = request.getEnterTime();
@@ -91,14 +102,14 @@ public class GuestService {
 
         if(isWithinTimeRange) return request;
         else {
-            refuseRequest(request);
-            return null;
+            deleteRequest(request);
+            throw new Exception("该访客的登记已过期，已自动删除");
         }
     }
 
-    public GuestRequest checkIfRequestValidByQrCode(String hash) {
+    public GuestRequest checkIfRequestValidByQrCode(String hash) throws Exception {
         List<GuestRequest> requests = guestRequestRepository.findGuestRequestByHash(hash);
-        if(requests.isEmpty()) return null;
+        if(requests.isEmpty()) throw new Exception("该访客没有进行登记");
         GuestRequest request = requests.getLast();
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime enterTime = request.getEnterTime();
@@ -110,12 +121,12 @@ public class GuestService {
 
         if(isWithinTimeRange) return request;
         else {
-            refuseRequest(request);
-            return null;
+            deleteRequest(request);
+            throw new Exception("该访客的登记已过期，已自动删除");
         }
     }
 
-    public void allowRequest(@NotNull GuestRequest request, int entrance) {
+    public void allowRequest(@NotNull GuestRequest request, int entrance) throws Exception {
         GuestRecord guestRecord = new GuestRecord();
         guestRecord.setEnterTime(request.getEnterTime());
         guestRecord.setLeaveTime(request.getLeaveTime());
@@ -127,7 +138,21 @@ public class GuestService {
         guestRequestRepository.delete(request);
     }
 
-    public void refuseRequest(GuestRequest request) {
+    public void refuseRequest(GuestRequest request) throws Exception {
         guestRequestRepository.delete(request);
+    }
+
+    public void deleteRequest(GuestRequest request) throws Exception {
+        guestRequestRepository.delete(request);
+    }
+
+    // 每隔1小时执行一次
+    @Scheduled(fixedRate = 60 * 60 * 1000) // 单位是毫秒
+    public void removeExpiredRequests() {
+        LocalDateTime now = LocalDateTime.now();
+        List<GuestRequest> expiredGuests = guestRequestRepository.findGuestRequestsByLeaveTimeBefore(now);
+        if (!expiredGuests.isEmpty()) {
+            guestRequestRepository.deleteAll(expiredGuests);
+        }
     }
 }

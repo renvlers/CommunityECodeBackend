@@ -80,4 +80,20 @@ public class UserController {
             return new Response<>(e.getMessage(), null);
         }
     }
+
+    @GetMapping("/get_user?uid={uid}")
+    public Response<GetUserByIdResponseDto> getUserById(@PathVariable int uid) {
+        try {
+            User user = userService.getUserById(uid);
+            if(user == null) throw new Exception("用户不存在");
+            int id = user.getUid();
+            String username = user.getUsername();
+            int permissionId = user.getPermissionId();
+            String roomNumber = user.getRoomNumber();
+            return new Response<>("用户查找成功", new GetUserByIdResponseDto(id, username, permissionId, roomNumber));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(e.getMessage(), null);
+        }
+    }
 }
