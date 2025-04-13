@@ -51,8 +51,8 @@ public class GuestController {
         }
     }
 
-    @GetMapping("/check_request_by_code?code={code}")
-    public Response<RequestDto> checkRequestByCode(@PathVariable String code) {
+    @GetMapping("/check_request_by_code")
+    public Response<RequestDto> checkRequestByCode(@RequestParam String code) {
         try {
             GuestRequest guestRequest = guestService.checkIfRequestValidByCode(code);
             String requestCode = guestRequest.getRequestCode();
@@ -77,8 +77,8 @@ public class GuestController {
         }
     }
 
-    @GetMapping("/check_request_by_phone?phone={phone}")
-    public Response<RequestDto> checkRequestByPhone(@PathVariable String phone) {
+    @GetMapping("/check_request_by_phone")
+    public Response<RequestDto> checkRequestByPhone(@RequestParam String phone) {
         try {
             GuestRequest guestRequest = guestService.checkIfRequestValidByPhone(phone);
             String requestCode = guestRequest.getRequestCode();
@@ -103,8 +103,8 @@ public class GuestController {
         }
     }
 
-    @GetMapping("/check_request_by_qr_code?qr_code={qrCode}")
-    public Response<RequestDto> checkRequestByQrCode(@PathVariable String qrCode) {
+    @GetMapping("/check_request_by_qr_code")
+    public Response<RequestDto> checkRequestByQrCode(@RequestParam String qrCode) {
         try {
             GuestRequest guestRequest = guestService.checkIfRequestValidByQrCode(qrCode);
             String requestCode = guestRequest.getRequestCode();
@@ -153,8 +153,8 @@ public class GuestController {
         }
     }
 
-    @GetMapping("/get_requests_by_owner?owner={ownerId}")
-    public Response<List<RequestDto>> getRequestsByOwner(@PathVariable int ownerId) {
+    @GetMapping("/get_requests_by_owner")
+    public Response<List<RequestDto>> getRequestsByOwner(@RequestParam int ownerId) {
         try {
             List<GuestRequest> guestRequests = guestService.getRequestsByOwnerId(ownerId);
             List<RequestDto> requestDtos = new Vector<>();
@@ -176,8 +176,8 @@ public class GuestController {
         }
     }
 
-    @GetMapping("/get_records_by_owner?owner={ownerId}")
-    public Response<List<RecordDto>> getRecordsByOwner(@PathVariable int ownerId) {
+    @GetMapping("/get_records_by_owner")
+    public Response<List<RecordDto>> getRecordsByOwner(@RequestParam int ownerId) {
         try {
             List<GuestRecord> guestRecords = guestService.getRecordsByOwnerId(ownerId);
             List<RecordDto> recordDtos = new Vector<>();

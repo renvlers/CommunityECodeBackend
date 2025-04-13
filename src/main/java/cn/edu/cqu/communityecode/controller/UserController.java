@@ -81,8 +81,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get_user?uid={uid}")
-    public Response<GetUserByIdResponseDto> getUserById(@PathVariable int uid) {
+    @GetMapping("/get_user")
+    public Response<GetUserByIdResponseDto> getUserById(@RequestParam int uid) {
         try {
             User user = userService.getUserById(uid);
             if(user == null) throw new Exception("用户不存在");
