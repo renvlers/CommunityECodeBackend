@@ -78,6 +78,12 @@ public class UserService {
         return users.getLast();
     }
 
+    public User checkIfUserExistsByPhone(String phone) {
+        List<User> users = userRepository.findUserByPhone(phone);
+        if(users.isEmpty()) return null;
+        else return users.getLast();
+    }
+
     public User getUserById(int uid) throws Exception {
         List<User> users = userRepository.findUserByUid(uid);
         if(users.isEmpty()) throw new Exception("用户不存在");

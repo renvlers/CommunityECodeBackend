@@ -30,7 +30,7 @@ public class UserController {
     @PostMapping("/register")
     public Response<RegisterResponseDto> register(@RequestBody RegisterRequestDto registerRequestDto) {
         try{
-            if(userService.getUserByPhone(registerRequestDto.getPhone()) != null) throw new Exception("用户已存在");
+            if(userService.checkIfUserExistsByPhone(registerRequestDto.getPhone()) != null) throw new Exception("用户已存在");
             User user = new User();
             user.setPhone(registerRequestDto.getPhone());
             user.setUsername(registerRequestDto.getUsername());
