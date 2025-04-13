@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RefuseRequestDto {
     private String requestCode;
+    private int entrance;
 }

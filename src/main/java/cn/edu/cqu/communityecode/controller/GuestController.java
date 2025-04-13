@@ -145,7 +145,7 @@ public class GuestController {
     public Response<Object> refuseRequest(@RequestBody RefuseRequestDto refuseRequestDto) {
         try {
             GuestRequest guestRequest = guestService.getRequestByRequestCode(refuseRequestDto.getRequestCode());
-            guestService.refuseRequest(guestRequest);
+            guestService.refuseRequest(guestRequest, refuseRequestDto.getEntrance());
             return new Response<>("已拒绝访客进入", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -189,7 +189,10 @@ public class GuestController {
                         guestRecord.getGuestName(),
                         guestRecord.getGuestPhone(),
                         guestService.getEntranceById(guestRecord.getId()),
-                        guestRecord.getOwnerId()
+                        guestRecord.getOwnerId(),
+                        guestRecord.getRequestCode(),
+                        guestRecord.getHash(),
+                        guestRecord.getStatus()
                 ));
             }
             return new Response<>("访客记录查询成功", recordDtos);
@@ -199,12 +202,90 @@ public class GuestController {
         }
     }
 
-    @DeleteMapping("/delete_request?code={requestCode}")
-    public Response<Object> deleteRequestByCode(@PathVariable String requestCode) {
+    @DeleteMapping("/delete_request")
+    public Response<Object> withdrawRequestByCode(@RequestParam String requestCode) {
         try {
             GuestRequest guestRequest = guestService.getRequestByRequestCode(requestCode);
-            guestService.deleteRequest(guestRequest);
-            return new Response<>("删除成功，已取消该访客登记", null);
+            guestService.withdrawRequest(guestRequest);
+            return new Response<>("已撤回该访客登记", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/get_records_by_guest_phone")
+    public Response<List<RecordDto>> getRecordsByGuestPhone(@RequestParam String phone) {
+        try {
+            List<GuestRecord> guestRecords = guestService.getRecordsByGuestPhone(phone);
+            List<RecordDto> recordDtos = new Vector<>();
+            for(GuestRecord guestRecord: guestRecords) {
+                recordDtos.add(new RecordDto(
+                        guestRecord.getId(),
+                        guestRecord.getEnterTime(),
+                        guestRecord.getLeaveTime(),
+                        guestRecord.getGuestName(),
+                        guestRecord.getGuestPhone(),
+                        guestService.getEntranceById(guestRecord.getId()),
+                        guestRecord.getOwnerId(),
+                        guestRecord.getRequestCode(),
+                        guestRecord.getHash(),
+                        guestRecord.getStatus()
+                ));
+            }
+            return new Response<>("访客记录查询成功", recordDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/get_records_by_guest_name")
+    public Response<List<RecordDto>> getRecordsByGuestName(@RequestParam String name) {
+        try {
+            List<GuestRecord> guestRecords = guestService.getRecordsByGuestName(name);
+            List<RecordDto> recordDtos = new Vector<>();
+            for(GuestRecord guestRecord: guestRecords) {
+                recordDtos.add(new RecordDto(
+                        guestRecord.getId(),
+                        guestRecord.getEnterTime(),
+                        guestRecord.getLeaveTime(),
+                        guestRecord.getGuestName(),
+                        guestRecord.getGuestPhone(),
+                        guestService.getEntranceById(guestRecord.getId()),
+                        guestRecord.getOwnerId(),
+                        guestRecord.getRequestCode(),
+                        guestRecord.getHash(),
+                        guestRecord.getStatus()
+                ));
+            }
+            return new Response<>("访客记录查询成功", recordDtos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response<>(e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/get_all_records")
+    public Response<List<RecordDto>> getAllRecords() {
+        try {
+            List<GuestRecord> guestRecords = guestService.getAllRecords();
+            List<RecordDto> recordDtos = new Vector<>();
+            for(GuestRecord guestRecord: guestRecords) {
+                recordDtos.add(new RecordDto(
+                        guestRecord.getId(),
+                        guestRecord.getEnterTime(),
+                        guestRecord.getLeaveTime(),
+                        guestRecord.getGuestName(),
+                        guestRecord.getGuestPhone(),
+                        guestService.getEntranceById(guestRecord.getId()),
+                        guestRecord.getOwnerId(),
+                        guestRecord.getRequestCode(),
+                        guestRecord.getHash(),
+                        guestRecord.getStatus()
+                ));
+            }
+            return new Response<>("访客记录查询成功", recordDtos);
         } catch (Exception e) {
             e.printStackTrace();
             return new Response<>(e.getMessage(), null);

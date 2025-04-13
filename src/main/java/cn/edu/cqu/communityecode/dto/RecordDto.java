@@ -17,4 +17,7 @@ public class RecordDto {
     private String guestPhone;
     private String entrance;
     private Integer ownerId;
+    private String requestCode;
+    private String hash;
+    private Integer status;
 }

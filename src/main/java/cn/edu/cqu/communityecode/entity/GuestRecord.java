@@ -31,4 +31,13 @@ public class GuestRecord {
 
     @Column(name = "owner_id")
     private Integer ownerId;
+
+    @Column(name = "request_code")
+    private String requestCode;
+
+    @Column(name = "hash")
+    private String hash;
+
+    @Column(name = "status")
+    private Integer status;
 }
