@@ -15,6 +15,6 @@ public class RecordDto {
     private LocalDateTime leaveTime;
     private String guestName;
     private String guestPhone;
-    private Integer entrance;
+    private String entrance;
     private Integer ownerId;
 }

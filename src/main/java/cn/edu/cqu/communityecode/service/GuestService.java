@@ -2,6 +2,7 @@ package cn.edu.cqu.communityecode.service;
 
 import cn.edu.cqu.communityecode.entity.GuestRecord;
 import cn.edu.cqu.communityecode.entity.GuestRequest;
+import cn.edu.cqu.communityecode.repository.EntranceRepository;
 import cn.edu.cqu.communityecode.repository.GuestRecordRepository;
 import cn.edu.cqu.communityecode.repository.GuestRequestRepository;
 import cn.edu.cqu.communityecode.util.HashUtil;
@@ -21,6 +22,9 @@ public class GuestService {
 
     @Autowired
     private GuestRecordRepository guestRecordRepository;
+
+    @Autowired
+    private EntranceRepository entranceRepository;
 
     public String generateRequestCode() {
         SecureRandom secureRandom = new SecureRandom();
@@ -154,5 +158,9 @@ public class GuestService {
         if (!expiredGuests.isEmpty()) {
             guestRequestRepository.deleteAll(expiredGuests);
         }
+    }
+
+    public String getEntranceById(int id) throws NullPointerException {
+        return entranceRepository.findEntranceById(id).getLast().getName();
     }
 }

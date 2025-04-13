@@ -188,7 +188,7 @@ public class GuestController {
                         guestRecord.getLeaveTime(),
                         guestRecord.getGuestName(),
                         guestRecord.getGuestPhone(),
-                        guestRecord.getEntrance(),
+                        guestService.getEntranceById(guestRecord.getId()),
                         guestRecord.getOwnerId()
                 ));
             }
