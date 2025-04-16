@@ -33,7 +33,7 @@ public class UserService {
             code.append(random.nextInt(10));
         }
         String verificationCode = code.toString();
-        String content = "【社区e码通】您的验证码为" + verificationCode + "，请在5分钟内完成验证。";
+        String content = "【小区e码通】您的验证码为" + verificationCode + "，请在5分钟内完成验证。";
 
         String apiUrl = "https://api.smsbao.com/sms";
         String apiKey = "c15fae1c98854433addae5e356a1628b";
