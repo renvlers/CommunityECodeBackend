@@ -140,7 +140,7 @@ public class GuestService {
         guestRequestRepository.delete(request);
     }
 
-    // 每隔1小时执行一次
+    // 每隔1分钟执行一次
     @Scheduled(fixedRate = 60 * 1000) // 单位是毫秒
     public void removeExpiredRequests() throws Exception {
         LocalDateTime now = LocalDateTime.now();
