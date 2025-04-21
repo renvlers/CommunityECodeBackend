@@ -122,6 +122,7 @@ public class UserController {
                     user.getUid(),
                     user.getUsername(),
                     user.getPermissionId(),
+                    user.getPhone(),
                     user.getRoomNumber()
             );
             return ResponseEntity.ok(new Response<>("用户查找成功", data));
