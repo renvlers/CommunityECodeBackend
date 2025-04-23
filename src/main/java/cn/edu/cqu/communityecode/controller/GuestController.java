@@ -176,7 +176,7 @@ public class GuestController {
                 dtos.add(new RecordDto(
                         r.getId(), r.getEnterTime(), r.getLeaveTime(),
                         r.getGuestName(), r.getGuestPhone(),
-                        guestService.getEntranceById(r.getId()),
+                        guestService.getEntranceById(r.getEntrance()),
                         r.getOwnerId(), r.getRequestCode(), r.getHash(), r.getStatus()));
             }
             return ResponseEntity.ok(new Response<>("访客记录查询成功", dtos));
@@ -213,7 +213,7 @@ public class GuestController {
                 dtos.add(new RecordDto(
                         r.getId(), r.getEnterTime(), r.getLeaveTime(),
                         r.getGuestName(), r.getGuestPhone(),
-                        guestService.getEntranceById(r.getId()),
+                        guestService.getEntranceById(r.getEntrance()),
                         r.getOwnerId(), r.getRequestCode(), r.getHash(), r.getStatus()));
             }
             return ResponseEntity.ok(new Response<>("访客记录查询成功", dtos));
@@ -235,7 +235,7 @@ public class GuestController {
                 dtos.add(new RecordDto(
                         r.getId(), r.getEnterTime(), r.getLeaveTime(),
                         r.getGuestName(), r.getGuestPhone(),
-                        guestService.getEntranceById(r.getId()),
+                        guestService.getEntranceById(r.getEntrance()),
                         r.getOwnerId(), r.getRequestCode(), r.getHash(), r.getStatus()));
             }
             return ResponseEntity.ok(new Response<>("访客记录查询成功", dtos));
@@ -257,7 +257,7 @@ public class GuestController {
                 dtos.add(new RecordDto(
                         r.getId(), r.getEnterTime(), r.getLeaveTime(),
                         r.getGuestName(), r.getGuestPhone(),
-                        guestService.getEntranceById(r.getId()),
+                        guestService.getEntranceById(r.getEntrance()),
                         r.getOwnerId(), r.getRequestCode(), r.getHash(), r.getStatus()));
             }
             return ResponseEntity.ok(new Response<>("访客记录查询成功", dtos));
