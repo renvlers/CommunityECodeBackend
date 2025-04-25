@@ -110,6 +110,28 @@ public class UserController {
         }
     }
 
+    /** 使用原密码修改密码 */
+    @PutMapping("/change_password_without_code")
+    public ResponseEntity<Response<ChangePasswordResponseDto>> changePasswordWithoutCode(@RequestBody ChangePasswordWithoutCodeRequestDto dto) {
+        try {
+            int uid = dto.getUid();
+            String originalPassword = HashUtil.sha256(dto.getOriginalPassword());
+            String newPassword = HashUtil.sha256(dto.getNewPassword());
+
+            User user = userService.getUserById(uid);
+            if(user == null) throw new Exception("用户不存在");
+            if(!user.getPassword().equals(originalPassword)) throw new Exception("原密码错误");
+            if(newPassword.equals(user.getPassword())) throw new Exception("新密码不能与原密码一致");
+
+            userService.changePassword(user, newPassword);
+            return ResponseEntity.ok(new Response<>("密码修改成功", null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(e.getMessage(), null));
+        }
+    }
+
+
     /** 根据 UID 查询用户 */
     @GetMapping("/get_user")
     public ResponseEntity<Response<GetUserByIdResponseDto>> getUserById(@RequestParam int uid) {
