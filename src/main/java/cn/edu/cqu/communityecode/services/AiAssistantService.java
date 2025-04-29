@@ -29,7 +29,7 @@ public class AiAssistantService {
                 result + "\n\n" +
                 "请返回对此的解读，你应该返回一个JSON文本，其中字段`success`表示返回是否成功，字段`message`表示返回的具体内容，**不要在JSON对象以外返回包括Markdown格式标记在内的任何字符！！！**"
                 +
-                "你可能需要用到以下信息：1. status表示状态，其中为0表示已过期，为1表示已同意，为2表示已拒绝，为3表示已撤回; 2. 用户权限值为1表示业主，0表示物管";
+                "你可能需要用到以下信息：1. status表示状态，其中为0表示已过期，为1表示已允许，为2表示已拒绝，为3表示已撤回，如果出现其他情况，统一记作未处理; 2. 用户权限值为1表示业主，0表示物管";
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
         OkHttpClient client = new OkHttpClient.Builder()
@@ -162,7 +162,9 @@ public class AiAssistantService {
                         ```
 
                         你应该返回一个JSON文本，其中字段`isSql`表示返回的内容是否为SQL语句；字段`message`表示返回的具体内容，如果`isSql`为`true`，则表示SQL语句，否则以文本形式表示不提供SQL语句的原因，**不要在JSON对象以外返回包括Markdown格式标记在内的任何字符！！！**
-                        **注意：**如果用户的提问无法转化为查询或是涉及到询问其他业主的访客登记信息，则不应该提供SQL，且isSql为false，此时返回的内容应该直接面向最终用户，不要出现诸如"SQL"之类的技术名词
+                        **注意：**
+                            1. 如果用户的提问无法转化为查询或是涉及到询问其他业主的访客登记信息，则不应该提供SQL
+                            2. isSql为false返回的内容应该直接面向最终用户，不要出现诸如"SQL"之类的技术名词
                         """;
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
