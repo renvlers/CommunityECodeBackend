@@ -30,7 +30,7 @@ public class GuestService {
     public String generateRequestCode() {
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder codeBuilder = new StringBuilder();
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 5; i++) {
             codeBuilder.append(secureRandom.nextInt(10));
         }
         return codeBuilder.toString();
