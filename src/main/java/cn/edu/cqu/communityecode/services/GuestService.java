@@ -116,7 +116,7 @@ public class GuestService {
         if (requests.isEmpty() && records.isEmpty())
             throw new Exception("访问代码无效");
         else if (requests.isEmpty())
-            throw new Exception("访问代码无效或已被使用");
+            throw new Exception("访问代码过期或已被使用");
         else
             return requests.getLast();
     }
@@ -127,7 +127,7 @@ public class GuestService {
         if (requests.isEmpty() && records.isEmpty())
             throw new Exception("二维码无效");
         else if (requests.isEmpty())
-            throw new Exception("二维码已被使用");
+            throw new Exception("二维码过期或已被使用");
         else
             return requests.getLast();
     }
