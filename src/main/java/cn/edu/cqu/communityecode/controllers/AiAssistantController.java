@@ -37,7 +37,7 @@ public class AiAssistantController {
             boolean isSql = contentObj.getBoolean("isSql");
             String message = contentObj.getString("message");
             if (!isSql)
-                return ResponseEntity.ok().body(new Response<>("未完成查询", new AiResponseDto(isSql, message)));
+                return ResponseEntity.ok().body(new Response<>("success", new AiResponseDto(true, message)));
             String executionResult = aiAssistantService.executeSqlQuery(message);
             String result = aiAssistantService.getTextFromAiByResult(aiMessageDto.getUid(), aiMessageDto.getMessage(),
                     executionResult);
