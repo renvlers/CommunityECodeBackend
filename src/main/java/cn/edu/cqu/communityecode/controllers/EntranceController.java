@@ -35,4 +35,6 @@ public class EntranceController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(e.getMessage(), null));
         }
     }
+
+    // TODO: 添加一个GET方法——getEntranceNameById
 }
