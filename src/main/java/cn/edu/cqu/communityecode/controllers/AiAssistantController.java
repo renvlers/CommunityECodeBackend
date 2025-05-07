@@ -24,6 +24,7 @@ public class AiAssistantController {
     @Autowired
     private UserService userService;
 
+    // TODO: 将方法名更改为sendMessageFromOwner
     @PostMapping("/send_message")
     ResponseEntity<Response<AiResponseDto>> sendMessage(@RequestBody AiMessageDto aiMessageDto) {
         try {
@@ -55,4 +56,6 @@ public class AiAssistantController {
             return ResponseEntity.badRequest().body(new Response<>(e.getMessage(), null));
         }
     }
+
+    // TODO: 新增方法——sendMessageFromAdmin，用于物管人员提问
 }
