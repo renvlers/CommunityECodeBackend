@@ -116,6 +116,7 @@ public class UserController {
     }
 
     /** 使用原密码修改密码 */
+    // TODO: 将此方法迁移到AdminController中，并改名为changeAdminPassword
     @PutMapping("/change_password_without_code")
     public ResponseEntity<Response<ChangePasswordResponseDto>> changePasswordWithoutCode(
             @RequestBody ChangePasswordWithoutCodeRequestDto dto) {
