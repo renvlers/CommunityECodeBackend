@@ -24,9 +24,8 @@ public class AiAssistantController {
     @Autowired
     private UserService userService;
 
-    // TODO: 将方法名更改为sendMessageFromOwner
     @PostMapping("/send_message")
-    ResponseEntity<Response<AiResponseDto>> sendMessage(@RequestBody AiMessageDto aiMessageDto) {
+    ResponseEntity<Response<AiResponseDto>> sendMessageFromOwner(@RequestBody AiMessageDto aiMessageDto) {
         try {
             userService.getUserById(aiMessageDto.getUid());
             String sqlResult = aiAssistantService.sendPromptToAi(aiMessageDto.getUid(), aiMessageDto.getMessage());
