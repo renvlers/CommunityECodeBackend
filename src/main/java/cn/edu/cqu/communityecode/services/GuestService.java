@@ -30,11 +30,16 @@ public class GuestService {
 
     public String generateRequestCode() {
         SecureRandom secureRandom = new SecureRandom();
-        StringBuilder codeBuilder = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            codeBuilder.append(secureRandom.nextInt(10));
-        }
-        return codeBuilder.toString();
+        String code;
+        // 防止访问代码重复
+        do {
+            StringBuilder codeBuilder = new StringBuilder();
+            for (int i = 0; i < 5; i++) {
+                codeBuilder.append(secureRandom.nextInt(10));
+            }
+            code = codeBuilder.toString();
+        } while (!guestRequestRepository.findGuestRequestByRequestCode(code).isEmpty());
+        return code;
     }
 
     public String generateQrCode(String requestCode, LocalDateTime enterTime, LocalDateTime leaveTime, String guestName,
