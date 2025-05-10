@@ -50,7 +50,6 @@ public class UserController {
             user.setPhone(dto.getPhone());
             user.setUsername(dto.getUsername());
             user.setPassword(HashUtil.sha256(dto.getPassword()));
-            user.setPermissionId(dto.getPermission());
             user.setRoomNumber(dto.getRoomNumber());
             userService.createNewUser(user);
 
@@ -73,9 +72,6 @@ public class UserController {
             User user = userService.getUserByPhone(dto.getPhone());
             if (user == null)
                 throw new Exception("用户不存在");
-            if (!user.getPermissionId().equals(dto.getPermission()))
-                throw new Exception("权限验证失败");
-
             String pwd = HashUtil.sha256(dto.getPassword());
             if (!pwd.equals(user.getPassword()))
                 throw new Exception("密码错误");
@@ -115,32 +111,6 @@ public class UserController {
         }
     }
 
-    /** 使用原密码修改密码 */
-    // TODO: 将此方法迁移到AdminController中，并改名为changeAdminPassword
-    @PutMapping("/change_password_without_code")
-    public ResponseEntity<Response<ChangePasswordResponseDto>> changePasswordWithoutCode(
-            @RequestBody ChangePasswordWithoutCodeRequestDto dto) {
-        try {
-            int uid = dto.getUid();
-            String originalPassword = HashUtil.sha256(dto.getOriginalPassword());
-            String newPassword = HashUtil.sha256(dto.getNewPassword());
-
-            User user = userService.getUserById(uid);
-            if (user == null)
-                throw new Exception("用户不存在");
-            if (!user.getPassword().equals(originalPassword))
-                throw new Exception("原密码错误");
-            if (newPassword.equals(user.getPassword()))
-                throw new Exception("新密码不能与原密码一致");
-
-            userService.changePassword(user, newPassword);
-            return ResponseEntity.ok(new Response<>("密码修改成功", null));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(e.getMessage(), null));
-        }
-    }
-
     /** 根据 UID 查询用户 */
     @GetMapping("/get_user")
     public ResponseEntity<Response<GetUserByIdResponseDto>> getUserById(@RequestParam int uid) {
@@ -153,7 +123,6 @@ public class UserController {
             GetUserByIdResponseDto data = new GetUserByIdResponseDto(
                     user.getUid(),
                     user.getUsername(),
-                    user.getPermissionId(),
                     user.getPhone(),
                     user.getRoomNumber());
             return ResponseEntity.ok(new Response<>("用户查找成功", data));

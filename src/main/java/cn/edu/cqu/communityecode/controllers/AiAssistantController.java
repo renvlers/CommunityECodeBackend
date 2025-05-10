@@ -56,5 +56,35 @@ public class AiAssistantController {
         }
     }
 
-    // TODO: 新增方法——sendMessageFromAdmin，用于物管人员提问
+    @PostMapping("send_message_from_admin")
+    ResponseEntity<Response<AiResponseDto>> sendMessageFromAdmin(@RequestBody AiMessageDto aiMessageDto) {
+        // 注：在此方法下，请求体的uid字段无效
+        try {
+            String sqlResult = aiAssistantService.sendPromptToAiFromAdmin(aiMessageDto.getMessage());
+            JSONObject sqlResultObject = new JSONObject(sqlResult);
+            JSONObject choice = sqlResultObject.getJSONArray("choices").getJSONObject(0);
+            JSONObject messageObj = choice.getJSONObject("message");
+            String content = messageObj.getString("content");
+            JSONObject contentObj = new JSONObject(content);
+            boolean isSql = contentObj.getBoolean("isSql");
+            String message = contentObj.getString("message");
+            if (!isSql)
+                return ResponseEntity.ok().body(new Response<>("success", new AiResponseDto(true, message)));
+            String executionResult = aiAssistantService.executeSqlQuery(message);
+            String result = aiAssistantService.getTextFromAiByResultForAdmin(aiMessageDto.getMessage(),
+                    executionResult);
+            JSONObject resultObject = new JSONObject(result);
+            JSONObject resultChoice = resultObject.getJSONArray("choices").getJSONObject(0);
+            JSONObject resultMessageObj = resultChoice.getJSONObject("message");
+            String resultContent = resultMessageObj.getString("content");
+            JSONObject resultContentObj = new JSONObject(resultContent);
+            boolean success = resultContentObj.getBoolean("success");
+            String text = resultContentObj.getString("message");
+            AiResponseDto aiResponseDto = new AiResponseDto(success, text);
+            return ResponseEntity.ok(new Response<>("success", aiResponseDto));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(new Response<>(e.getMessage(), null));
+        }
+    }
 }

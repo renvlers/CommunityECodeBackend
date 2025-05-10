@@ -21,9 +21,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "permission_id")
-    private Integer permissionId;
-
     @Column(name = "room_number")
     private String roomNumber;
 }

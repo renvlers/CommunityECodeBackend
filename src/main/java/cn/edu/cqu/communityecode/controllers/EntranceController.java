@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Vector;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/entrance")
@@ -36,5 +37,14 @@ public class EntranceController {
         }
     }
 
-    // TODO: 添加一个GET方法——getEntranceNameById
+    @GetMapping("/get_entrance_name_by_id")
+    public ResponseEntity<Response<String>> getEntranceNameById(@RequestParam int id) {
+        try {
+            String name = entranceService.getEntranceById(id).getName();
+            return ResponseEntity.ok(new Response<>("入口名称查询成功", name));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response<>(e.getMessage(), null));
+        }
+    }
 }
