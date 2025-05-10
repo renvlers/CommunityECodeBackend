@@ -181,6 +181,7 @@ public class AiAssistantService {
                             2. isSql为false返回的内容应该直接面向最终用户，不要出现诸如"SQL"之类的技术名词
                             3. isSql为false时，对最终用户使用第二人称称呼，不要使用“UID为x的用户”这种不适合正面交流的称呼
                             4. 如果用户的查询涉及数据库中不存在的数据，请直接告知用户，不要强行生成无法执行的SQL语句
+                            5. 提示词中已经给出了所有的表，仅限在给出的表中查询，除此之外不要自己生造不存在的表或者列
                         """;
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
@@ -352,6 +353,7 @@ public class AiAssistantService {
                             2. isSql为false返回的内容应该直接面向最终用户，不要出现诸如"SQL"之类的技术名词
                             3. isSql为false时，对最终用户使用第二人称称呼
                             4. 如果用户的查询涉及数据库中不存在的数据，请直接告知用户，不要强行生成无法执行的SQL语句
+                            5. 提示词中已经给出了所有的表，仅限在给出的表中查询，除此之外不要自己生造不存在的表或者列
                         """;
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
