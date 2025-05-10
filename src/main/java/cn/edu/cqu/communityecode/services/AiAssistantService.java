@@ -35,7 +35,7 @@ public class AiAssistantService {
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS)
                 .build();
 
         String jsonBody = """
@@ -185,7 +185,7 @@ public class AiAssistantService {
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS)
                 .build();
 
         String jsonBody = """
@@ -356,7 +356,7 @@ public class AiAssistantService {
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS)
                 .build();
 
         String jsonBody = """
@@ -398,7 +398,7 @@ public class AiAssistantService {
         prompt = prompt.replace("\n", "\\n");
         prompt = prompt.replace("\"", "\\\"");
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS)
                 .build();
 
         String jsonBody = """
