@@ -76,7 +76,7 @@ public class AiAssistantService {
                         以下是我的数据库表设计，供参考：
                         ```sql
                         -- ----------------------------
-                        -- 表 entrance 结构
+                        -- 表 entrance 结构，注意 id 为 0 表示无入口，用于处理访客记录过期或撤回的情况，如需查询入口信息请从 1 开始
                         -- ----------------------------
                         DROP TABLE IF EXISTS `entrance`;
                         CREATE TABLE `entrance` (
@@ -248,7 +248,7 @@ public class AiAssistantService {
                         以下是我的数据库表设计，供参考：
                         ```sql
                         -- ----------------------------
-                        -- 表 entrance 结构
+                        -- 表 entrance 结构，注意 id 为 0 表示无入口，用于处理访客记录过期或撤回的情况，如需查询入口信息请从 1 开始
                         -- ----------------------------
                         DROP TABLE IF EXISTS `entrance`;
                         CREATE TABLE `entrance` (
