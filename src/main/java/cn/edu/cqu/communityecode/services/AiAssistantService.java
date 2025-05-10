@@ -69,7 +69,7 @@ public class AiAssistantService {
         String apiKey = "sk-Xl66Sp43zZON1myJgq8xTh2zvLhiXEG7uMySc5KMx9nKExh2";
         String prompt = "现有一位UID为" + uid + "的业主询问了以下内容：" + userMessage + '\n'
                 + """
-                        请基于该业主的内容，生成相应的SQL语句，用于查询，请注意一个业主不能查询属于其他业主的访客登记请求或访客访问记录
+                        请基于该业主询问的内容，直接回答业主的问题或生成相应的SQL语句，用于查询，请注意一个业主不能查询属于其他业主的访客登记请求或访客访问记录
 
                         系统采用的数据库是MySQL 8.3.0，生成查询时请注意使用正确的SQL方言
 
@@ -241,7 +241,7 @@ public class AiAssistantService {
         String apiKey = "sk-Xl66Sp43zZON1myJgq8xTh2zvLhiXEG7uMySc5KMx9nKExh2";
         String prompt = "现有一位物管人员询问了以下内容：" + userMessage + '\n'
                 + """
-                        请基于该物管人员的内容，生成相应的SQL语句，用于查询
+                        请基于该物管人员询问的内容，直接回答物管人员的问题或生成相应的SQL语句，用于查询
 
                         系统采用的数据库是MySQL 8.3.0，生成查询时请注意使用正确的SQL方言
 
