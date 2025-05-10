@@ -2,6 +2,7 @@ package cn.edu.cqu.communityecode.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.edu.cqu.communityecode.entities.Admin;
@@ -9,6 +10,7 @@ import cn.edu.cqu.communityecode.repositories.AdminRepository;
 
 @Service
 public class AdminService {
+    @Autowired
     private AdminRepository adminRepository;
 
     public Admin getAdminByPhone(String phone) throws Exception {
